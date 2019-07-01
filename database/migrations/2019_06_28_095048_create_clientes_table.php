@@ -15,6 +15,9 @@ class CreateClientesTable extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('nome', 150);
+            $table->string('image', 150)->nullable()->comment("nome do arquivo");
+            $table->string('cpf_cnpj', 19)->unique();
             $table->timestamps();
         });
     }
