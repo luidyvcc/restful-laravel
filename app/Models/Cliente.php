@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model
 {
-    //
+    protected $fillable = [
+        'nome',
+        'image',
+        'cpf_cnpj'
+    ];
 }

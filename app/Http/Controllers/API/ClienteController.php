@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCliente;
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 
-class ClienteAPIController extends Controller
+class ClienteController extends Controller
 {
+
     private $cliente;
     private $request;
 
@@ -26,29 +28,23 @@ class ClienteAPIController extends Controller
      */
     public function index()
     {
-        $data =  $this->cliente->all();
+        $data =  $this->cliente->get();
         return response()->json($data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreCliente  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCliente $request)
     {
-        //
+        $dataForm = $request->all();
+
+        $data = $this->cliente->create($dataForm);
+
+        return response()->json($data, 201);
     }
 
     /**
@@ -58,17 +54,6 @@ class ClienteAPIController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }
