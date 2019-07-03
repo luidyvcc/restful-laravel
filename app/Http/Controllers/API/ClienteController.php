@@ -74,7 +74,10 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
-        //
+        if ( !$data = $this->cliente->find($id) )
+            return response()->json(['error' => "Nenhum registro com o id {$id} encontrado!"], 404);
+
+        return response()->json($data, 201);
     }
 
     /**
