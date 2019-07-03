@@ -7,7 +7,7 @@ use App\Http\Requests\StoreCliente;
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 use Intervention\Image\ImageManagerStatic as Image;
-use  Illuminate\Support\Facades\Stogare;
+use  Illuminate\Support\Facades\Storage;
 
 class ClienteController extends Controller
 {
@@ -53,8 +53,8 @@ class ClienteController extends Controller
             $nameFile = $name.".".$extension;
 
             $upload = Image::make($dataForm['image'])
-                            ->resize(177,236)
-                            ->save(storage_path("app/public/clientes{$nameFile}", 70));
+                            ->resize(500)
+                            ->save(storage_path("app/public/clientes/{$nameFile}", 70));
 
             if ( !$upload ) response()->json( ["error" => "Falha no upload do arquivo!"], 500 );
             else $dataForm['image'] = $nameFile;
@@ -74,10 +74,11 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
-        if ( !$data = $this->cliente->find($id) )
+        if ( !$data = $this->cliente->find($id) ) {
             return response()->json(['error' => "Nenhum registro com o id {$id} encontrado!"], 404);
-
-        return response()->json($data, 201);
+        } else {
+            return response()->json($data, 201);
+        }
     }
 
     /**
@@ -100,6 +101,16 @@ class ClienteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ( !$data = $this->cliente->find($id) ) {
+            return response()->json(['error' => "Nenhum registro com o id {$id} encontrado!"], 404);
+        }
+
+        if ( $data->image && Storage::disk('public')->exists("/clientes/{$data->image}") ) {
+            Storage::disk('public')->delete("/clientes/{$data->image}");
+        }
+
+        $data->delete();
+
+        return response()->json(['success' => "Registro {$id} deletado!"], 200);
     }
 }
