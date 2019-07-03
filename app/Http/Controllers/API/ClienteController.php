@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreCliente;
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
+use Intervention\Image\ImageManagerStatic as Image;
+use  Illuminate\Support\Facades\Stogare;
 
 class ClienteController extends Controller
 {
@@ -41,6 +43,23 @@ class ClienteController extends Controller
     public function store(StoreCliente $request)
     {
         $dataForm = $request->all();
+
+        if ( $request->hasFile('image') && $request->file('image')->isValid() ) {
+
+            $extension = $request->image->extension();
+
+            $name = kebab_case($request->nome)."_".uniqid(date('dmYHis'));
+
+            $nameFile = $name.".".$extension;
+
+            $upload = Image::make($dataForm['image'])
+                            ->resize(177,236)
+                            ->save(storage_path("app/public/clientes{$nameFile}", 70));
+
+            if ( !$upload ) response()->json( ["error" => "Falha no upload do arquivo!"], 500 );
+            else $dataForm['image'] = $nameFile;
+
+        }
 
         $data = $this->cliente->create($dataForm);
 
