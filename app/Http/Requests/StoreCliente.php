@@ -29,4 +29,17 @@ class StoreCliente extends FormRequest
             'cpf_cnpj' => 'required|unique:clientes',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'nome.required' => 'Nome é um campo obrigatório',
+            'cpf_cnpj.required'  => 'CPF/CNPJ é um campo obrigatório',
+        ];
+    }
 }
