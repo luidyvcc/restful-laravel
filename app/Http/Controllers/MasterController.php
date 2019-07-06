@@ -31,8 +31,10 @@ class MasterController extends BaseController
      * @param  \App\Http\Requests\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
+
+        $request = $this->request;
 
         $dataForm = $request->all();
 
@@ -81,8 +83,10 @@ class MasterController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
+
+        $request = $this->request;
 
         if ( !$data = $this->model->find($id) ) {
             return response()->json(['error' => "Nenhum registro encontrado!"], 404);
