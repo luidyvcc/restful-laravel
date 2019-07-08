@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Intervention\Image\ImageManagerStatic as Image;
-use  Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class MasterController extends BaseController
 {
@@ -28,19 +28,19 @@ class MasterController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
 
-        $request = $this->request;
+        $this->validate( $request, $this->model->storeRules() );
 
         $dataForm = $request->all();
 
         if ( $request->hasFile($this->upload) && $request->file($this->upload)->isValid() ) {
 
-            $extension = $request->image->extension();
+            $extension = $request->file($this->upload)->extension();
 
             $name = kebab_case($request->nome)."_".uniqid(date('dmYHis'));
 
@@ -83,10 +83,10 @@ class MasterController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
 
-        $request = $this->request;
+        $this->validate( $request, $this->model->updateRules() );
 
         if ( !$data = $this->model->find($id) ) {
             return response()->json(['error' => "Nenhum registro encontrado!"], 404);
@@ -96,16 +96,17 @@ class MasterController extends BaseController
 
         if ( $request->hasFile($this->upload) && $request->file($this->upload)->isValid() ) {
 
+            $arquivo = $this->model->arquivo($id);
 
-            if ( $data->image && Storage::disk('public')->exists("/{$this->path}/{$data->image}") ) {
+            if ( $arquivo && Storage::disk('public')->exists("/{$this->path}/{$arquivo}") ) {
 
-                Storage::disk('public')->delete("/{$this->path}/{$data->image}");
+                Storage::disk('public')->delete("/{$this->path}/{$arquivo}");
 
-                $nameFile = $data->image;
+                $nameFile = $arquivo;
 
             } else {
 
-                $extension = $request->image->extension();
+                $extension = $request->file($this->upload)->extension();
 
                 $name = kebab_case($request->nome)."_".uniqid(date('dmYHis'));
 
@@ -143,16 +144,21 @@ class MasterController extends BaseController
      */
     public function destroy($id)
     {
-        if ( !$data = $this->model->find($id) ) {
-            return response()->json(['error' => "Nenhum registro encontrado!"], 404);
+        if ( $data = $this->model->find($id) ) {
+
+            if ( method_exists( $this->model, 'arquivo' ) ) {
+
+                Storage::disk('public')->delete("/{$this->path}/{$this->model->arquivo($id)}");
+
+            }
+
+            $data->delete();
+
+            return response()->json(['success' => "Registro {$id} deletado!"], 200);
+
         }
 
-        if ( $data->image && Storage::disk('public')->exists("/clientes/{$data->image}") ) {
-            Storage::disk('public')->delete("/clientes/{$data->image}");
-        }
+        return response()->json(['error' => "Nenhum registro encontrado!"], 404);
 
-        $data->delete();
-
-        return response()->json(['success' => "Registro {$id} deletado!"], 200);
     }
 }
