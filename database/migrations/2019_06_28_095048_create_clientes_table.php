@@ -17,6 +17,7 @@ class CreateClientesTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome', 150);
             $table->string('image', 150)->nullable()->comment("nome do arquivo");
+            $table->softDeletes();
             $table->timestamps();
         });
     }
