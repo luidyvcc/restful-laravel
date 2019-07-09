@@ -9,7 +9,6 @@ class Cliente extends Model
     protected $fillable = [
         'nome',
         'image',
-        'cpf_cnpj'
     ];
 
     public function storeRules()
@@ -17,7 +16,6 @@ class Cliente extends Model
         return [
             'nome' => 'required',
             'image' => 'image',
-            'cpf_cnpj' => 'required|unique:clientes',
         ];
     }
 
@@ -26,7 +24,6 @@ class Cliente extends Model
         return [
             'nome' => '',
             'image' => 'image',
-            'cpf_cnpj' => 'unique:clientes',
         ];
     }
 
@@ -34,5 +31,10 @@ class Cliente extends Model
     {
         $data = $this->find($id);
         return $data->image;
+    }
+
+    public function documentos()
+    {
+        return $this->hasOne(Documento::class, 'cliente_id', 'id');
     }
 }

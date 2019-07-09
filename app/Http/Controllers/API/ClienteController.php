@@ -22,4 +22,13 @@ class ClienteController extends MasterController
 
     }
 
+    public function documentos($id)
+    {
+        if ( !$data = $this->model->with('documentos')->find($id) ) {
+            return response()->json(['error' => "Nenhum registro encontrado!"], 404);
+        }
+
+        return response()->json($data, 201);
+    }
+
 }
