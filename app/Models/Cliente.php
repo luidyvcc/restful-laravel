@@ -33,7 +33,7 @@ class Cliente extends Model
         return $data->image;
     }
 
-    public function documentos()
+    public function documento()
     {
         return $this->hasOne(Documento::class, 'cliente_id', 'id');
     }

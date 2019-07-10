@@ -1,6 +1,6 @@
 <?php
 
-Route::get('clientes/{id}/documentos', 'API\ClienteController@documentos');
+Route::get('clientes/{id}/documento', 'API\ClienteController@documento');
 Route::apiResource('clientes', 'API\ClienteController');
 
 
