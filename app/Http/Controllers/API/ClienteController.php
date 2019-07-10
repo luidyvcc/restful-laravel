@@ -31,4 +31,13 @@ class ClienteController extends MasterController
         return response()->json($data, 201);
     }
 
+    public function telefones($id)
+    {
+        if ( !$data = $this->model->with('telefones')->find($id) ) {
+            return response()->json(['error' => "Nenhum registro encontrado!"], 404);
+        }
+
+        return response()->json($data, 201);
+    }
+
 }
