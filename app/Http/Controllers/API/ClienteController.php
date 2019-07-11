@@ -8,7 +8,7 @@ use App\Models\Cliente;
 class ClienteController extends MasterController
 {
 
-    protected $model, $path, $upload, $request;
+    protected $model, $path, $upload, $width, $height;
 
 
     public function __construct(Cliente $cliente)
@@ -19,6 +19,10 @@ class ClienteController extends MasterController
         $this->path = "clientes";
 
         $this->upload = "image";
+
+        $this->width = 500;
+
+        $this->height = null;
 
     }
 
@@ -34,6 +38,15 @@ class ClienteController extends MasterController
     public function telefones($id)
     {
         if ( !$data = $this->model->with('telefones')->find($id) ) {
+            return response()->json(['error' => "Nenhum registro encontrado!"], 404);
+        }
+
+        return response()->json($data, 201);
+    }
+
+    public function locacoes($id)
+    {
+        if ( !$data = $this->model->with('locacoes')->find($id) ) {
             return response()->json(['error' => "Nenhum registro encontrado!"], 404);
         }
 

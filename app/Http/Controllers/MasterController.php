@@ -47,7 +47,9 @@ class MasterController extends BaseController
             $nameFile = $name.".".$extension;
 
             $upload = Image::make($dataForm[$this->upload])
-                            ->resize(500)
+                            ->resize($this->width, $this->height,
+                                        function ($constraint) { $constraint->aspectRatio(); }
+                                    )
                             ->save(storage_path("app/public/{$this->path}/{$nameFile}", 70));
 
             if ( !$upload ) response()->json( ["error" => "Falha no upload do arquivo!"], 500 );
@@ -115,7 +117,9 @@ class MasterController extends BaseController
             }
 
             $upload = Image::make($dataForm[$this->upload])
-                            ->resize(500)
+                            ->resize($this->width, $this->height,
+                                        function ($constraint) { $constraint->aspectRatio(); }
+                                    )
                             ->save(storage_path("app/public/{$this->path}/{$nameFile}", 70));
 
             if ( !$upload ) {
