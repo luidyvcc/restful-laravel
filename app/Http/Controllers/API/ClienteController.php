@@ -8,7 +8,7 @@ use App\Models\Cliente;
 class ClienteController extends MasterController
 {
 
-    protected $model, $path, $upload, $width, $height;
+    protected $model, $path, $upload, $width, $height, $paginate;
 
 
     public function __construct(Cliente $cliente)
@@ -23,6 +23,8 @@ class ClienteController extends MasterController
         $this->width = 500;
 
         $this->height = null;
+
+        $this->paginate = 5;
 
     }
 

@@ -21,7 +21,11 @@ class MasterController extends BaseController
      */
     public function index()
     {
-        $data =  $this->model->get();
+        $data = property_exists($this, 'paginate') ?
+                    $this->paginate > 0 ?
+                    $this->model->paginate($this->paginate) :
+                    $this->model->get() :
+                $this->model->get();
         return response()->json($data);
     }
 
