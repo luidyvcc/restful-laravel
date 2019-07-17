@@ -1,5 +1,7 @@
 <?php
 
+Route::post('login', 'Auth\AuthController@authenticate');
+
 // Clientes
 Route::get('clientes/{id}/documento', 'API\ClienteController@documento');
 Route::get('clientes/{id}/telefones', 'API\ClienteController@telefones');
