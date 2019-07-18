@@ -1,6 +1,8 @@
 <?php
 
+// Login - JWT Auth
 Route::post('login', 'Auth\AuthController@authenticate');
+Route::get('login', 'Auth\AuthController@getAuthenticatedUser');
 
 // Clientes
 Route::get('clientes/{id}/documento', 'API\ClienteController@documento');
