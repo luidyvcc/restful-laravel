@@ -1,26 +1,34 @@
 <?php
 
-// Login - JWT Auth
-Route::post('login', 'Auth\AuthController@authenticate');
-Route::post('login-refresh', 'Auth\AuthController@refreshToken');
-Route::get('login', 'Auth\AuthController@getAuthenticatedUser');
+Route::group(['namespace' => 'Auth'], function () {
 
-// Clientes
-Route::get('clientes/{id}/documento', 'API\ClienteController@documento');
-Route::get('clientes/{id}/telefones', 'API\ClienteController@telefones');
-Route::get('clientes/{id}/locacoes', 'API\ClienteController@locacoes');
-Route::apiResource('clientes', 'API\ClienteController');
+    // Login - JWT Auth
+    Route::post('login', 'AuthController@authenticate');
+    Route::post('login-refresh', 'AuthController@refreshToken');
+    Route::get('login', 'AuthController@getAuthenticatedUser');
 
-// Documentos
-Route::get('documentos/{id}/cliente', 'API\DocumentoController@cliente');
-Route::apiResource('documentos', 'API\DocumentoController');
+});
 
-// Telefones
-Route::get('telefones/{id}/cliente', 'API\TelefoneController@cliente');
-Route::apiResource('telefones', 'API\TelefoneController');
+Route::group(['namespace' => 'API', 'middleware' => 'auth:api'], function(){
 
-// Filmes
-Route::apiResource('filmes', 'API\FilmeController');
+    // Clientes
+    Route::get('clientes/{id}/documento', 'ClienteController@documento');
+    Route::get('clientes/{id}/telefones', 'ClienteController@telefones');
+    Route::get('clientes/{id}/locacoes', 'ClienteController@locacoes');
+    Route::apiResource('clientes', 'ClienteController');
 
-// Filmes
-Route::apiResource('locacoes', 'API\LocacaoController');
+    // Documentos
+    Route::get('documentos/{id}/cliente', 'DocumentoController@cliente');
+    Route::apiResource('documentos', 'DocumentoController');
+
+    // Telefones
+    Route::get('telefones/{id}/cliente', 'TelefoneController@cliente');
+    Route::apiResource('telefones', 'TelefoneController');
+
+    // Filmes
+    Route::apiResource('filmes', 'FilmeController');
+
+    // Filmes
+    Route::apiResource('locacoes', 'LocacaoController');
+
+});
