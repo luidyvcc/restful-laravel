@@ -2,6 +2,7 @@
 
 // Login - JWT Auth
 Route::post('login', 'Auth\AuthController@authenticate');
+Route::post('login-refresh', 'Auth\AuthController@refreshToken');
 Route::get('login', 'Auth\AuthController@getAuthenticatedUser');
 
 // Clientes
