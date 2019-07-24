@@ -1,13 +1,11 @@
 <?php
 
-Route::group(['namespace' => 'Auth'], function () {
 
-    // Login - JWT Auth
-    Route::post('login', 'AuthController@authenticate');
-    Route::post('login-refresh', 'AuthController@refreshToken');
-    Route::get('login', 'AuthController@getAuthenticatedUser');
+// Login - JWT Auth
+Route::post('login', 'Auth\AuthController@authenticate');
+Route::post('login-refresh', 'Auth\AuthController@refreshToken');
+Route::get('login', 'Auth\AuthController@getAuthenticatedUser');
 
-});
 
 Route::group(['namespace' => 'API', 'middleware' => 'auth:api'], function(){
 
