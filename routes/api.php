@@ -7,7 +7,7 @@ Route::post('login-refresh', 'Auth\AuthController@refreshToken');
 Route::get('login', 'Auth\AuthController@getAuthenticatedUser');
 
 
-Route::group(['namespace' => 'API', 'middleware' => 'auth:api'], function(){
+Route::group(['namespace' => 'API'/*, 'middleware' => 'auth:api'*/], function(){
 
     // Clientes
     Route::get('clientes/{id}/documento', 'ClienteController@documento');
@@ -26,7 +26,10 @@ Route::group(['namespace' => 'API', 'middleware' => 'auth:api'], function(){
     // Filmes
     Route::apiResource('filmes', 'FilmeController');
 
-    // Filmes
+    // Locação
     Route::apiResource('locacoes', 'LocacaoController');
+
+    // Fornecedor
+    Route::apiResource('fornecedores', 'FornecedorController');
 
 });
